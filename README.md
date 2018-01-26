@@ -54,6 +54,11 @@ Below is an example for 'data' in my application:</br>
 The key represents the timestamp in milliseconds of date, and the value is the actual exchange rate of that day. There are plenty to be played to fine tune and cometic the graph by customize the 'options'.</br>
 
 ## Back-end API signature
+Start up the server by command:</br>
+```
+$node client.js
+```
+
 Specification:</br>
 - hostname: 127.0.0.1</br>
 - port: 3000</br>
