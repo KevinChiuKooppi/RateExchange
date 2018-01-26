@@ -14,7 +14,6 @@
     </style>
 </head>
 <body>
-
     <div class="container">
         <nav class="navbar navbar-inverse navbar-fixed-top" style="height:100px">
                 <a class="navbar-brand" style="font-size:50px; padding-top: 40px;" href="#">Rate Exchanger</a>
@@ -416,21 +415,6 @@
 
 <script>
     $(document).ready(function() {
-    //     var rawData = [[1509494400000, 60], [1509580800000, 100], [1509667200000, 15], [1509753600000, 50]];
-    //     $.plot($("#placeholder"), 
-    //         [{data: rawData}], 
-    //         {
-    //             yaxis: { },
-    //             xaxis: { 
-    //                 mode: "time",
-    //                 minTickSize: [1, "day"],
-    //                 min: (new Date("2017/11/01")).getTime(),
-    //                 max: (new Date("2017/11/04")).getTime()
-    //             },
-    //             "lines": {"show": "true"},
-    //             "points": {"show": "true"},
-    //             clickable:true,hoverable: true
-    //         });
         $('#latestExBtn').prop("disabled", true);
         $('#viewHistBtn').prop("disabled", true);
         $('select').change(checkFormValid);
@@ -439,6 +423,7 @@
         setSwapListener();
     });
 
+    //Enable 'Go' and 'View History' buttons only when corresponding input fields are valid.
     var checkFormValid = function() {
         var latestExAccept = false;
         var viewHistAccept = false;
@@ -465,6 +450,7 @@
         }
     }
 
+    //Swap currencies between from currency and to currency.
     function setSwapListener() {
         $('#inverseBtn').click(function(e) {
 
@@ -482,6 +468,7 @@
         });
     }
 
+    //Make HTTP request to calculate currency by latest rate
     function getLatestExchangeResult() {
         var originVal = $('#originVal').val();
         var fromCurrency = $('#fromCurrency').val();
@@ -502,6 +489,7 @@
         xhttp.send();
     }
 
+    //Make HTTP request to get histocical rates
     function getHistoryRateResult() {
         $('#placeholder').html('');
 
@@ -541,8 +529,6 @@
                     xaxis: { 
                         mode: "time",
                         minTickSize: [1, "day"]
-                        // min: (new Date("2018/01/22")).getTime(),
-                        // max: (new Date("2018/01/25")).getTime()
                     },
                     "lines": {"show": "true"},
                     "points": {"show": "true"},

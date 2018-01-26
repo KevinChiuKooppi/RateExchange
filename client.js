@@ -8,6 +8,7 @@ var historicalResultObj = new Object();
 const hostname = '127.0.0.1';
 const port = 3000;
 
+// API: Calculate currency by latest rate.
 app.get('/exchange', function (req, res) {
     // Set App ID (required):
     oxr.set({
@@ -48,6 +49,7 @@ app.get('/exchange', function (req, res) {
     });
 })
 
+// API: Get historical rates between 2 currencies
 app.get('/historical', function (req, res) {
     oxr.set({
         app_id: '833e73e958b343c4a8e8968f6785acfa'
@@ -92,28 +94,31 @@ app.get('/historical', function (req, res) {
             requestGetHistoricalAsync(dateList[6], fromCurrency, toCurrency), requestGetHistoricalAsync(dateList[7], fromCurrency, toCurrency)]);
     }
 
-    //Write the result returned from the multiple requests to OpenExchangeRage.getHistorical
+    //Write the result into response, data returned from the OpenExchangeRage.getHistorical through multiple HTTP requests.
     setTimeout(function(){
         console.log("Result Object: " + JSON.stringify(historicalResultObj)); 
         res.end(JSON.stringify(historicalResultObj))}, 
         5000);
 })
 
-//UI API
+// UI
 app.get("/ui", function (req, res) {
     res.sendFile(path.join(__dirname + "/index.html"))
 })
 
+// Server up
 var server = app.listen(port, hostname, function () {
 
     console.log(`Server running at http://${hostname}:${port}/`);
 
 })
 
+// Padding 'month' and 'day', for example: 2017-1-1 to 2017-01-01
 function pad(num) {
     return (num < 10) ? '0' + num.toString() : num.toString();
 }
 
+// Calling open-exchange-rates --> get historical rates
 function getHistorical(dateStr, fromCurrency, toCurrency) {
     oxr.historical(dateStr, function(error) {
         console.log("Date: " + dateStr);
@@ -131,11 +136,13 @@ function getHistorical(dateStr, fromCurrency, toCurrency) {
         var resultAmount = fx(1).from(fromCurrency).to(toCurrency).toFixed(6);
         console.log( 1 + " " + fromCurrency + " in " + toCurrency + ": " + resultAmount );
         
+        // dateStr is the key, resultAmount is the value in result object.
         historicalResultObj[dateStr] = resultAmount;
         return resultAmount;
     });
 }
 
+// Call get historical rates in asynchronization mode.
 function requestGetHistoricalAsync(dateStr, fromCurrency, toCurrency, resultObj) {
     return new Promise(function(resolve, reject) {
         getHistorical(dateStr, fromCurrency, toCurrency);
